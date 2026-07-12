@@ -4,6 +4,8 @@ A VB.NET **Windows Forms** desktop UI — an "API Explorer" that exercises **eve
 client-facing feature** of the [PWF Auth](https://pwfauth.com) API from a tabbed
 window, writing each request/response to a live **Activity log**.
 
+![The API Explorer running a live app/info call](../docs/api-explorer.png)
+
 > The console sibling ([PwfAuthConsoleClient](../PwfAuthConsoleClient)) runs the
 > same features from the command line. Both share the identical `PwfAuthClient`,
 > `CryptoEnvelope`, and `Hwid` files.

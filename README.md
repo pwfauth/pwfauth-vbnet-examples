@@ -11,6 +11,11 @@ Two small, self-contained VB.NET apps that show how to talk to
 accounts, and OTA update checks behind one REST API. Between them they exercise
 **every client-facing endpoint**.
 
+![The PwfAuthWinFormsClient "API Explorer" running a live app/info call](docs/api-explorer.png)
+
+> `PwfAuthWinFormsClient` — the tabbed **API Explorer**: every endpoint is one
+> click, and each request/response is written to the live activity log.
+
 | Project | What it shows |
 | --- | --- |
 | [`PwfAuthConsoleClient`](PwfAuthConsoleClient) | A guided command-line run through **every** endpoint: app-info, check-key, login → heartbeat → logout, trial, HWID-reset, and the account system (register / login / change-password) |
