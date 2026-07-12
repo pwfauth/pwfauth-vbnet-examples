@@ -1,4 +1,4 @@
-# PWF Auth — VB.NET example clients
+# PWF Auth — VB.NET & C# example clients
 
 <!-- CI badge hidden until the GitHub account's Actions billing is resolved. To restore, delete these comment markers:
 [![build](https://github.com/pwfauth/pwfauth-vbnet-examples/actions/workflows/build.yml/badge.svg)](https://github.com/pwfauth/pwfauth-vbnet-examples/actions/workflows/build.yml)
@@ -6,7 +6,7 @@
 
 
 
-Two small, self-contained VB.NET apps that show how to talk to
+Self-contained **VB.NET** and **C#** example clients that show how to talk to
 **[PWF Auth](https://pwfauth.com)** — a free backend for license keys, end-user
 accounts, and OTA update checks behind one REST API. Between them they exercise
 **every client-facing endpoint**.
@@ -25,6 +25,7 @@ accounts, and OTA update checks behind one REST API. Between them they exercise
 | --- | --- |
 | [`PwfAuthConsoleClient`](PwfAuthConsoleClient) | A guided command-line run through **every** endpoint: app-info, check-key, login → heartbeat → logout, trial, HWID-reset, and the account system (register / login / change-password) |
 | [`PwfAuthWinFormsClient`](PwfAuthWinFormsClient) | The same features as a desktop **"API Explorer"** — a tabbed Windows Forms window with a live activity log |
+| [`PwfAuthCSharpClient`](PwfAuthCSharpClient) | The console demo ported to **C# on .NET Framework 4.8.1** (classic crypto / JSON APIs) for legacy apps |
 
 Both are dependency-free (no external NuGet packages) and each folder is
 self-contained: it carries its own copy of the client so you can drop a single
@@ -36,6 +37,9 @@ project into your solution.
 | `CryptoEnvelope.vb` | AES-256-CBC + HMAC-SHA256 envelope — byte-for-byte compatible with the server's `PayloadCrypto` |
 | `Hwid.vb` | A stable per-machine hardware id sent at login |
 
+The `PwfAuthCSharpClient` project mirrors the same three files as `.cs`, rewritten
+against the classic .NET Framework crypto/JSON APIs.
+
 `check-key`, `trial`, `request-hwid-reset`, and the account endpoints send/receive
 plain JSON; **`login` / `heartbeat` / `logout` require the encrypted envelope**,
 and `app/info` returns one.
@@ -43,6 +47,8 @@ and `app/info` returns one.
 ## Requirements
 
 - .NET SDK 8.0 or newer (`dotnet --version`)
+- For `PwfAuthCSharpClient`: the **.NET Framework 4.8.1** targeting pack (ships with
+  Visual Studio; the build also restores it via NuGet)
 - A free PWF Auth account and an app — create one at <https://pwfauth.com>
 
 ## Configure
@@ -65,6 +71,9 @@ dotnet run --project PwfAuthConsoleClient -- PWF-XXXX-XXXX-XXXX
 
 # Windows Forms
 dotnet run --project PwfAuthWinFormsClient
+
+# C# on .NET Framework 4.8.1
+dotnet run --project PwfAuthCSharpClient -- PWF-XXXX-XXXX-XXXX
 ```
 
 ## Security note

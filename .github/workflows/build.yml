@@ -32,3 +32,6 @@ jobs:
 
       - name: Build WinForms client
         run: dotnet build PwfAuthWinFormsClient/PwfAuthWinFormsClient.vbproj -c Release
+
+      - name: Build C# .NET Framework 4.8.1 client
+        run: dotnet build PwfAuthCSharpClient/PwfAuthCSharpClient.csproj -c Release
