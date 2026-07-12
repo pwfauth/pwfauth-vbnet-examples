@@ -1,11 +1,17 @@
 name: build
 
-# Build both example clients on a clean Windows runner for every push / PR.
+# Build both example clients on a clean Windows runner.
 # WinForms targets net8.0-windows, so this must run on Windows (not ubuntu).
+#
+# NOTE: auto-triggers (push / pull_request) are DISABLED for now because this
+# GitHub account's Actions are billing-locked, so every run fails to *start*
+# (not a code error — a clean clone builds 0/0). Re-enable them by uncommenting
+# the two lines below once billing is resolved at
+# https://github.com/settings/billing
 on:
-  push:
-  pull_request:
-  workflow_dispatch:   # allow running it manually from the Actions tab
+  workflow_dispatch:   # manual run only: Actions tab → this workflow → "Run workflow"
+  # push:
+  # pull_request:
 
 jobs:
   build:
