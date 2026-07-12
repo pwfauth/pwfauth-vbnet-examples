@@ -1,0 +1,28 @@
+name: build
+
+# Build both example clients on a clean Windows runner for every push / PR.
+# WinForms targets net8.0-windows, so this must run on Windows (not ubuntu).
+on:
+  push:
+  pull_request:
+  workflow_dispatch:   # allow running it manually from the Actions tab
+
+jobs:
+  build:
+    name: Build (Windows)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build console client
+        run: dotnet build PwfAuthConsoleClient/PwfAuthConsoleClient.vbproj -c Release
+
+      - name: Build WinForms client
+        run: dotnet build PwfAuthWinFormsClient/PwfAuthWinFormsClient.vbproj -c Release

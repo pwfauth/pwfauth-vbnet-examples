@@ -1,0 +1,18 @@
+# .NET build output
+bin/
+obj/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+
+# OS noise
+Thumbs.db
+.DS_Store
+
+# Archives / local backups (never publish — may embed secrets)
+*.rar
+*.zip
+*.7z

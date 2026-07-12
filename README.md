@@ -1,0 +1,65 @@
+# PWF Auth — VB.NET example clients
+
+[![build](https://github.com/pwfauth/pwfauth-vbnet-examples/actions/workflows/build.yml/badge.svg)](https://github.com/pwfauth/pwfauth-vbnet-examples/actions/workflows/build.yml)
+
+Two small, self-contained VB.NET apps that show how to talk to
+**[PWF Auth](https://pwfauth.com)** — a free backend for license keys, end-user
+accounts, and OTA update checks behind one REST API. Between them they exercise
+**every client-facing endpoint**.
+
+| Project | What it shows |
+| --- | --- |
+| [`PwfAuthConsoleClient`](PwfAuthConsoleClient) | A guided command-line run through **every** endpoint: app-info, check-key, login → heartbeat → logout, trial, HWID-reset, and the account system (register / login / change-password) |
+| [`PwfAuthWinFormsClient`](PwfAuthWinFormsClient) | The same features as a desktop **"API Explorer"** — a tabbed Windows Forms window with a live activity log |
+
+Both are dependency-free (no external NuGet packages) and each folder is
+self-contained: it carries its own copy of the client so you can drop a single
+project into your solution.
+
+| File (in each project) | Role |
+| --- | --- |
+| `PwfAuthClient.vb` | The client — one method per endpoint |
+| `CryptoEnvelope.vb` | AES-256-CBC + HMAC-SHA256 envelope — byte-for-byte compatible with the server's `PayloadCrypto` |
+| `Hwid.vb` | A stable per-machine hardware id sent at login |
+
+`check-key`, `trial`, `request-hwid-reset`, and the account endpoints send/receive
+plain JSON; **`login` / `heartbeat` / `logout` require the encrypted envelope**,
+and `app/info` returns one.
+
+## Requirements
+
+- .NET SDK 8.0 or newer (`dotnet --version`)
+- A free PWF Auth account and an app — create one at <https://pwfauth.com>
+
+## Configure
+
+Set your app secret with an environment variable (recommended — never commit it):
+
+```powershell
+setx PWF_APP_SECRET "your_app_secret_here"
+```
+
+Optional: `PWF_BASE_URL` to point at a different host (e.g. a staging server).
+In the WinForms app you can also type both values into the fields at the top of
+the window.
+
+## Run
+
+```powershell
+# Console — pass the key as an argument, or run with none to be prompted
+dotnet run --project PwfAuthConsoleClient -- PWF-XXXX-XXXX-XXXX
+
+# Windows Forms
+dotnet run --project PwfAuthWinFormsClient
+```
+
+## Security note
+
+An App Secret ships inside any client app and can be extracted from the binary,
+so treat client-side license checks as a **deterrent, not DRM**. Keep the secret
+out of source control — use the `PWF_APP_SECRET` environment variable above; the
+in-code default is intentionally blank.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
