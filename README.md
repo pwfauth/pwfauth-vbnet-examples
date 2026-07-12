@@ -16,6 +16,11 @@ accounts, and OTA update checks behind one REST API. Between them they exercise
 > `PwfAuthWinFormsClient` — the tabbed **API Explorer**: every endpoint is one
 > click, and each request/response is written to the live activity log.
 
+![PwfAuthConsoleClient — one run through every endpoint](docs/console-client.png)
+
+> `PwfAuthConsoleClient` — a single guided run exercising every endpoint
+> (`login` / `heartbeat` / `logout` travel encrypted).
+
 | Project | What it shows |
 | --- | --- |
 | [`PwfAuthConsoleClient`](PwfAuthConsoleClient) | A guided command-line run through **every** endpoint: app-info, check-key, login → heartbeat → logout, trial, HWID-reset, and the account system (register / login / change-password) |

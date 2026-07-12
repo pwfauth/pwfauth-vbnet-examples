@@ -3,6 +3,8 @@
 A VB.NET **console** example that exercises **every client-facing feature** of the
 [PWF Auth](https://pwfauth.com) API — a complete, dependency-free reference client.
 
+![A full run — every endpoint green](../docs/console-client.png)
+
 ## Features demonstrated
 
 | # | Feature | Endpoint | Wire format |
