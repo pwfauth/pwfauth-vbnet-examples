@@ -1,6 +1,10 @@
 # PWF Auth — VB.NET example clients
 
+<!-- CI badge hidden until the GitHub account's Actions billing is resolved. To restore, delete these comment markers:
 [![build](https://github.com/pwfauth/pwfauth-vbnet-examples/actions/workflows/build.yml/badge.svg)](https://github.com/pwfauth/pwfauth-vbnet-examples/actions/workflows/build.yml)
+-->
+
+
 
 Two small, self-contained VB.NET apps that show how to talk to
 **[PWF Auth](https://pwfauth.com)** — a free backend for license keys, end-user
