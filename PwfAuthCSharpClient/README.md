@@ -5,6 +5,8 @@ client-facing feature** of the [PWF Auth](https://pwfauth.com) API — the same
 program as [`PwfAuthConsoleClient`](../PwfAuthConsoleClient) (VB.NET on .NET 8),
 ported to C# for legacy **.NET Framework** apps.
 
+![A full run — every endpoint green](../docs/csharp-client.png)
+
 ## Why a .NET Framework build?
 
 .NET Framework 4.8.1 predates the modern one-shot crypto/JSON helpers, so

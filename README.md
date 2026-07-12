@@ -21,6 +21,11 @@ accounts, and OTA update checks behind one REST API. Between them they exercise
 > `PwfAuthConsoleClient` — a single guided run exercising every endpoint
 > (`login` / `heartbeat` / `logout` travel encrypted).
 
+![PwfAuthCSharpClient — the same run on .NET Framework 4.8.1](docs/csharp-client.png)
+
+> `PwfAuthCSharpClient` — the identical demo on **C# / .NET Framework 4.8.1**
+> (classic crypto & JSON APIs, still byte-for-byte compatible with the server).
+
 | Project | What it shows |
 | --- | --- |
 | [`PwfAuthConsoleClient`](PwfAuthConsoleClient) | A guided command-line run through **every** endpoint: app-info, check-key, login → heartbeat → logout, trial, HWID-reset, and the account system (register / login / change-password) |
