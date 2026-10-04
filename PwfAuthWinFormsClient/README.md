@@ -1,29 +1,31 @@
 # PwfAuthWinFormsClient
 
-A VB.NET **Windows Forms** desktop UI — an "API Explorer" that exercises **every
-client-facing feature** of the [PWF Auth](https://pwfauth.com) API from a tabbed
-window, writing each request/response to a live **Activity log**.
+A VB.NET **Windows Forms** "API Explorer" for the [PWF Auth](https://pwfauth.com)
+API, built on the official [PWFAuth NuGet package](https://www.nuget.org/packages/PWFAuth).
+Every client feature is one button in a tabbed window, and each result goes to a
+live **Activity log**.
 
-![The API Explorer running a live app/info call](../docs/api-explorer.png)
+![The API Explorer: signed in, heartbeat running](../docs/api-explorer.png)
 
 > The console sibling ([PwfAuthConsoleClient](../PwfAuthConsoleClient)) runs the
-> same features from the command line. Both share the identical `PwfAuthClient`,
-> `CryptoEnvelope`, and `Hwid` files.
+> same features from the command line.
 
 ## Features demonstrated
 
-| Tab | Feature | Endpoint | Wire format |
-| --- | --- | --- | --- |
-| Activation | Check a license key | `POST /api/auth/check-key.php` | plain |
-| Activation | Login (bind HWID, open session) | `POST /api/auth/login.php` | **encrypted** |
-| Activation | Heartbeat (keep alive / kill code) | `POST /api/auth/heartbeat.php` | **encrypted** |
-| Activation | Logout | `POST /api/auth/logout.php` | **encrypted** |
-| Trial & Reset | Start a free trial | `POST /api/auth/trial.php` | plain |
-| Trial & Reset | Request an HWID reset | `POST /api/auth/request-hwid-reset.php` | plain |
-| Accounts | Register an end-user account | `POST /api/auth/account-register.php` | plain |
-| Accounts | End-user account login | `POST /api/auth/account-login.php` | plain |
-| Accounts | Change account password | `POST /api/auth/change-password.php` | plain |
-| App info | App info + update check | `GET /api/app/info.php` | encrypted reply |
+| Tab | Feature | Package call |
+| --- | --- | --- |
+| Activation | Check a license key (no device seat used) | `CheckKeyAsync` |
+| Activation | Login, then the background heartbeat | `LoginAsync` + `StartHeartbeat` |
+| Activation | The kill switch: ban, pause, expiry or reset signs the window out | `SessionEnded` event |
+| Activation | One heartbeat by hand · Logout | `HeartbeatAsync` · `LogoutAsync` |
+| Trial & Reset | Free trial | `CreateTrialAsync` |
+| Trial & Reset | Move a license to this PC | `ResetHardwareIdAsync` |
+| Accounts | Register · Register with a license key | `RegisterAccountAsync` · `RegisterAccountWithKeyAsync` |
+| Accounts | Account login (with heartbeat) | `AccountLoginAsync` |
+| Accounts | Redeem a key onto the account | `RedeemKeyAsync` |
+| Accounts | Change password (signs the account out on every device) | `ChangeAccountPasswordAsync` |
+| App info | Name, version, download URL, login message, maintenance | `GetAppInfoAsync` |
+| App info | Update check | `CheckUpdateAsync` |
 
 ## Run
 
@@ -33,41 +35,46 @@ dotnet run
 ```
 
 Requires Windows (targets `net8.0-windows`). The **App Secret** and **Base URL**
-are editable at the top of the window; the fields are pre-filled from
-`PWF_APP_SECRET` / `PWF_BASE_URL` (or the fallbacks in `Form1.vb`).
+fields at the top of the window are pre-filled from `PWF_APP_SECRET` and
+`PWF_BASE_URL`, or from the fallbacks in `Form1.vb`.
 
 ## How it works
 
-`Form1.vb` builds a dark-themed, tabbed UI in code (no designer needed to read
-it). Every button calls one method on the shared `PwfAuthClient` and logs the
-outcome. The session tab shows the real lifecycle: **Check → Login → Heartbeat →
-Logout**, where login/heartbeat/logout travel as the AES-256 + HMAC envelope
-(`CryptoEnvelope.vb`) while check-key stays plain JSON.
-
-No external NuGet packages — just `System.Net.Http`, `System.Text.Json`, and
-`System.Security.Cryptography`.
+- **The layout** lives in `Form1.Designer.vb`, so you can edit it in the Visual
+  Studio Windows Forms Designer.
+- **The code-behind** in `Form1.vb` keeps **one `PwfClient`** for the whole app,
+  because the client holds the session and runs the heartbeat. Each button calls
+  one method and logs the reply.
+- **The session.** The login handler calls `client.StartHeartbeat()` on the UI
+  thread. The package then raises `SessionEnded` on the UI thread too, so the
+  handler can update labels directly, with no `Invoke`.
+- **Try the kill switch.** Ban the key in your dashboard and the window signs out
+  within one beat.
+- **Closing the window** logs out, so the session ends at once instead of timing out on the server.
 
 ## Files
 
 | File | Role |
 | --- | --- |
-| `Form1.vb` | The tabbed UI + one event handler per feature |
-| `PwfAuthClient.vb` | The client — one method per feature |
-| `CryptoEnvelope.vb` | AES-256-CBC + HMAC-SHA256 envelope — byte-for-byte compatible with the server's `PayloadCrypto` |
-| `Hwid.vb` | A stable per-machine hardware id sent at login |
+| `Form1.vb` | One event handler per feature, plus the `SessionEnded` handler |
+| `Form1.Designer.vb` | The tabbed layout (Windows Forms Designer) |
+| `Program.vb` | Starts the app |
 
 ## Configuration
 
 | Variable | Purpose | Default |
 | --- | --- | --- |
-| `PWF_APP_SECRET` | Your app secret (Applications → your app → API key) | — |
+| `PWF_APP_SECRET` | Your app secret (Applications → your app → App Settings) | — |
 | `PWF_BASE_URL` | API base URL | `https://pwfauth.com` |
 
 ## Notes
 
-- An app secret shipped in a desktop binary can be extracted — treat client-side
-  license checks as a deterrent, not DRM. Keep the secret out of source control.
-- The **Accounts** tab auto-fills a throwaway `demo_<timestamp>` account when you
-  leave the fields blank, and **Start free trial** issues a trial (once per
-  app/device) — this is a demo that hits the live API, so it leaves that test
-  data on the server.
+- An app secret shipped in a desktop binary can be extracted. Treat client-side
+  license checks as a deterrent, not DRM, and keep the secret out of source
+  control.
+- **Test data.** This demo calls the real API, so it leaves test data on the
+  server:
+  - When you leave the fields blank, the **Accounts** tab fills in a throwaway
+    `demo_<timestamp>` account.
+  - **Start free trial** issues a trial, once per app and device.
+  - **Register with the key** and **Redeem the key** use the key up.

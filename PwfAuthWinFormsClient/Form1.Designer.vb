@@ -62,9 +62,15 @@ Partial Class Form1
         Me.txtNewPass = New System.Windows.Forms.TextBox()
         Me.btnChangePass = New System.Windows.Forms.Button()
         Me.lblAccTip = New System.Windows.Forms.Label()
+        Me.lblAccKey = New System.Windows.Forms.Label()
+        Me.txtAccKey = New System.Windows.Forms.TextBox()
+        Me.btnRegisterKey = New System.Windows.Forms.Button()
+        Me.btnRedeem = New System.Windows.Forms.Button()
+        Me.lblRedeemNote = New System.Windows.Forms.Label()
         Me.tabAppInfo = New System.Windows.Forms.TabPage()
         Me.lblAppInfoNote = New System.Windows.Forms.Label()
         Me.btnAppInfo = New System.Windows.Forms.Button()
+        Me.btnUpdate = New System.Windows.Forms.Button()
         Me.lblAppInfo = New System.Windows.Forms.Label()
         Me.lblLog = New System.Windows.Forms.Label()
         Me.txtLog = New System.Windows.Forms.TextBox()
@@ -94,7 +100,7 @@ Partial Class Form1
         Me.lblSubtitle.Name = "lblSubtitle"
         Me.lblSubtitle.Size = New System.Drawing.Size(345, 15)
         Me.lblSubtitle.TabIndex = 1
-        Me.lblSubtitle.Text = "Every client endpoint, one window. Watch the Activity log below."
+        Me.lblSubtitle.Text = "Every client feature in one window, built on the PWFAuth NuGet package. Watch the Activity log below."
         '
         'lblSecret
         '
@@ -128,14 +134,14 @@ Partial Class Form1
         '
         Me.txtBaseUrl.Location = New System.Drawing.Point(18, 144)
         Me.txtBaseUrl.Name = "txtBaseUrl"
-        Me.txtBaseUrl.Size = New System.Drawing.Size(400, 23)
+        Me.txtBaseUrl.Size = New System.Drawing.Size(352, 23)
         Me.txtBaseUrl.TabIndex = 5
         '
         'lblHwid
         '
         Me.lblHwid.AutoSize = True
         Me.lblHwid.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        Me.lblHwid.Location = New System.Drawing.Point(430, 148)
+        Me.lblHwid.Location = New System.Drawing.Point(380, 148)
         Me.lblHwid.Name = "lblHwid"
         Me.lblHwid.Size = New System.Drawing.Size(37, 15)
         Me.lblHwid.TabIndex = 6
@@ -226,7 +232,7 @@ Partial Class Form1
         Me.btnHeartbeat.Name = "btnHeartbeat"
         Me.btnHeartbeat.Size = New System.Drawing.Size(190, 32)
         Me.btnHeartbeat.TabIndex = 4
-        Me.btnHeartbeat.Text = "Heartbeat"
+        Me.btnHeartbeat.Text = "Send one heartbeat"
         Me.btnHeartbeat.UseVisualStyleBackColor = True
         '
         'btnLogout
@@ -250,13 +256,13 @@ Partial Class Form1
         '
         'lblActNote
         '
-        Me.lblActNote.AutoSize = True
         Me.lblActNote.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        Me.lblActNote.Location = New System.Drawing.Point(16, 240)
+        Me.lblActNote.Location = New System.Drawing.Point(16, 228)
         Me.lblActNote.Name = "lblActNote"
-        Me.lblActNote.Size = New System.Drawing.Size(556, 15)
+        Me.lblActNote.Size = New System.Drawing.Size(600, 66)
         Me.lblActNote.TabIndex = 7
-        Me.lblActNote.Text = "check-key is a plain read-only status; login/heartbeat/logout use the encrypted envelope."
+        Me.lblActNote.Text = "Login starts the background heartbeat (StartHeartbeat). Ban or pause the key in your dashboard " &
+            "and this window is signed out within one beat. Check key reads the status without using a device seat."
         '
         'tabTrial
         '
@@ -308,7 +314,7 @@ Partial Class Form1
         Me.lblResetNote.Name = "lblResetNote"
         Me.lblResetNote.Size = New System.Drawing.Size(392, 15)
         Me.lblResetNote.TabIndex = 2
-        Me.lblResetNote.Text = "HWID reset — ask an admin to unbind the device from a license."
+        Me.lblResetNote.Text = "Move a license to this PC — unbinds the key from its old computer (the app's cooldown applies)."
         '
         'lblResetKey
         '
@@ -344,7 +350,7 @@ Partial Class Form1
         Me.txtResetReason.Name = "txtResetReason"
         Me.txtResetReason.Size = New System.Drawing.Size(400, 23)
         Me.txtResetReason.TabIndex = 6
-        Me.txtResetReason.Text = "Switched computers"
+        Me.txtResetReason.Text = "New computer"
         '
         'btnReset
         '
@@ -357,7 +363,7 @@ Partial Class Form1
         Me.btnReset.Name = "btnReset"
         Me.btnReset.Size = New System.Drawing.Size(240, 32)
         Me.btnReset.TabIndex = 7
-        Me.btnReset.Text = "Request HWID reset"
+        Me.btnReset.Text = "Move license to this PC"
         Me.btnReset.UseVisualStyleBackColor = False
         '
         'tabAccounts
@@ -368,8 +374,13 @@ Partial Class Form1
         Me.tabAccounts.Controls.Add(Me.txtAccPass)
         Me.tabAccounts.Controls.Add(Me.lblAccEmail)
         Me.tabAccounts.Controls.Add(Me.txtAccEmail)
+        Me.tabAccounts.Controls.Add(Me.lblAccKey)
+        Me.tabAccounts.Controls.Add(Me.txtAccKey)
         Me.tabAccounts.Controls.Add(Me.btnRegister)
+        Me.tabAccounts.Controls.Add(Me.btnRegisterKey)
         Me.tabAccounts.Controls.Add(Me.btnAccLogin)
+        Me.tabAccounts.Controls.Add(Me.btnRedeem)
+        Me.tabAccounts.Controls.Add(Me.lblRedeemNote)
         Me.tabAccounts.Controls.Add(Me.lblChangeNote)
         Me.tabAccounts.Controls.Add(Me.txtCurPass)
         Me.tabAccounts.Controls.Add(Me.txtNewPass)
@@ -387,7 +398,7 @@ Partial Class Form1
         '
         Me.lblAccUser.AutoSize = True
         Me.lblAccUser.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        Me.lblAccUser.Location = New System.Drawing.Point(16, 12)
+        Me.lblAccUser.Location = New System.Drawing.Point(16, 10)
         Me.lblAccUser.Name = "lblAccUser"
         Me.lblAccUser.Size = New System.Drawing.Size(60, 15)
         Me.lblAccUser.TabIndex = 0
@@ -395,7 +406,7 @@ Partial Class Form1
         '
         'txtAccUser
         '
-        Me.txtAccUser.Location = New System.Drawing.Point(16, 32)
+        Me.txtAccUser.Location = New System.Drawing.Point(16, 28)
         Me.txtAccUser.Name = "txtAccUser"
         Me.txtAccUser.Size = New System.Drawing.Size(290, 23)
         Me.txtAccUser.TabIndex = 1
@@ -404,7 +415,7 @@ Partial Class Form1
         '
         Me.lblAccPass.AutoSize = True
         Me.lblAccPass.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        Me.lblAccPass.Location = New System.Drawing.Point(320, 12)
+        Me.lblAccPass.Location = New System.Drawing.Point(320, 10)
         Me.lblAccPass.Name = "lblAccPass"
         Me.lblAccPass.Size = New System.Drawing.Size(57, 15)
         Me.lblAccPass.TabIndex = 2
@@ -412,7 +423,7 @@ Partial Class Form1
         '
         'txtAccPass
         '
-        Me.txtAccPass.Location = New System.Drawing.Point(320, 32)
+        Me.txtAccPass.Location = New System.Drawing.Point(320, 28)
         Me.txtAccPass.Name = "txtAccPass"
         Me.txtAccPass.Size = New System.Drawing.Size(290, 23)
         Me.txtAccPass.TabIndex = 3
@@ -422,7 +433,7 @@ Partial Class Form1
         '
         Me.lblAccEmail.AutoSize = True
         Me.lblAccEmail.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        Me.lblAccEmail.Location = New System.Drawing.Point(16, 66)
+        Me.lblAccEmail.Location = New System.Drawing.Point(16, 58)
         Me.lblAccEmail.Name = "lblAccEmail"
         Me.lblAccEmail.Size = New System.Drawing.Size(36, 15)
         Me.lblAccEmail.TabIndex = 4
@@ -430,10 +441,29 @@ Partial Class Form1
         '
         'txtAccEmail
         '
-        Me.txtAccEmail.Location = New System.Drawing.Point(16, 86)
+        Me.txtAccEmail.Location = New System.Drawing.Point(16, 76)
         Me.txtAccEmail.Name = "txtAccEmail"
-        Me.txtAccEmail.Size = New System.Drawing.Size(594, 23)
+        Me.txtAccEmail.Size = New System.Drawing.Size(290, 23)
         Me.txtAccEmail.TabIndex = 5
+        '
+        'lblAccKey
+        '
+        Me.lblAccKey.AutoSize = True
+        Me.lblAccKey.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
+        Me.lblAccKey.Location = New System.Drawing.Point(320, 58)
+        Me.lblAccKey.Name = "lblAccKey"
+        Me.lblAccKey.Size = New System.Drawing.Size(230, 15)
+        Me.lblAccKey.TabIndex = 6
+        Me.lblAccKey.Text = "Unused license key (sign up with it, or redeem it)"
+        '
+        'txtAccKey
+        '
+        Me.txtAccKey.Font = New System.Drawing.Font("Consolas", 10.0!)
+        Me.txtAccKey.Location = New System.Drawing.Point(320, 76)
+        Me.txtAccKey.Name = "txtAccKey"
+        Me.txtAccKey.PlaceholderText = "PWF-XXXX-XXXX-XXXX"
+        Me.txtAccKey.Size = New System.Drawing.Size(290, 23)
+        Me.txtAccKey.TabIndex = 7
         '
         'btnRegister
         '
@@ -442,49 +472,83 @@ Partial Class Form1
         Me.btnRegister.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnRegister.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Bold)
         Me.btnRegister.ForeColor = System.Drawing.Color.White
-        Me.btnRegister.Location = New System.Drawing.Point(16, 124)
+        Me.btnRegister.Location = New System.Drawing.Point(16, 112)
         Me.btnRegister.Name = "btnRegister"
-        Me.btnRegister.Size = New System.Drawing.Size(290, 32)
-        Me.btnRegister.TabIndex = 6
+        Me.btnRegister.Size = New System.Drawing.Size(190, 30)
+        Me.btnRegister.TabIndex = 8
         Me.btnRegister.Text = "Register account"
         Me.btnRegister.UseVisualStyleBackColor = False
+        '
+        'btnRegisterKey
+        '
+        Me.btnRegisterKey.BackColor = System.Drawing.Color.FromArgb(CType(CType(13, Byte), Integer), CType(CType(110, Byte), Integer), CType(CType(253, Byte), Integer))
+        Me.btnRegisterKey.FlatAppearance.BorderSize = 0
+        Me.btnRegisterKey.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnRegisterKey.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Bold)
+        Me.btnRegisterKey.ForeColor = System.Drawing.Color.White
+        Me.btnRegisterKey.Location = New System.Drawing.Point(214, 112)
+        Me.btnRegisterKey.Name = "btnRegisterKey"
+        Me.btnRegisterKey.Size = New System.Drawing.Size(190, 30)
+        Me.btnRegisterKey.TabIndex = 9
+        Me.btnRegisterKey.Text = "Register with the key"
+        Me.btnRegisterKey.UseVisualStyleBackColor = False
         '
         'btnAccLogin
         '
         Me.btnAccLogin.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Bold)
-        Me.btnAccLogin.Location = New System.Drawing.Point(320, 124)
+        Me.btnAccLogin.Location = New System.Drawing.Point(412, 112)
         Me.btnAccLogin.Name = "btnAccLogin"
-        Me.btnAccLogin.Size = New System.Drawing.Size(290, 32)
-        Me.btnAccLogin.TabIndex = 7
+        Me.btnAccLogin.Size = New System.Drawing.Size(198, 30)
+        Me.btnAccLogin.TabIndex = 10
         Me.btnAccLogin.Text = "Account login"
         Me.btnAccLogin.UseVisualStyleBackColor = True
+        '
+        'btnRedeem
+        '
+        Me.btnRedeem.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Bold)
+        Me.btnRedeem.Location = New System.Drawing.Point(16, 150)
+        Me.btnRedeem.Name = "btnRedeem"
+        Me.btnRedeem.Size = New System.Drawing.Size(190, 30)
+        Me.btnRedeem.TabIndex = 11
+        Me.btnRedeem.Text = "Redeem the key"
+        Me.btnRedeem.UseVisualStyleBackColor = True
+        '
+        'lblRedeemNote
+        '
+        Me.lblRedeemNote.AutoSize = True
+        Me.lblRedeemNote.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
+        Me.lblRedeemNote.Location = New System.Drawing.Point(214, 158)
+        Me.lblRedeemNote.Name = "lblRedeemNote"
+        Me.lblRedeemNote.Size = New System.Drawing.Size(330, 15)
+        Me.lblRedeemNote.TabIndex = 12
+        Me.lblRedeemNote.Text = "Adds the key's time to the account. The key is used up."
         '
         'lblChangeNote
         '
         Me.lblChangeNote.AutoSize = True
         Me.lblChangeNote.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        Me.lblChangeNote.Location = New System.Drawing.Point(16, 176)
+        Me.lblChangeNote.Location = New System.Drawing.Point(16, 194)
         Me.lblChangeNote.Name = "lblChangeNote"
         Me.lblChangeNote.Size = New System.Drawing.Size(212, 15)
-        Me.lblChangeNote.TabIndex = 8
-        Me.lblChangeNote.Text = "Change password — current / new"
+        Me.lblChangeNote.TabIndex = 13
+        Me.lblChangeNote.Text = "Change password — current / new (signs the account out on every device)"
         '
         'txtCurPass
         '
-        Me.txtCurPass.Location = New System.Drawing.Point(16, 200)
+        Me.txtCurPass.Location = New System.Drawing.Point(16, 214)
         Me.txtCurPass.Name = "txtCurPass"
         Me.txtCurPass.PlaceholderText = "current password"
         Me.txtCurPass.Size = New System.Drawing.Size(290, 23)
-        Me.txtCurPass.TabIndex = 9
+        Me.txtCurPass.TabIndex = 14
         Me.txtCurPass.UseSystemPasswordChar = True
         '
         'txtNewPass
         '
-        Me.txtNewPass.Location = New System.Drawing.Point(320, 200)
+        Me.txtNewPass.Location = New System.Drawing.Point(320, 214)
         Me.txtNewPass.Name = "txtNewPass"
         Me.txtNewPass.PlaceholderText = "new password"
         Me.txtNewPass.Size = New System.Drawing.Size(290, 23)
-        Me.txtNewPass.TabIndex = 10
+        Me.txtNewPass.TabIndex = 15
         Me.txtNewPass.UseSystemPasswordChar = True
         '
         'btnChangePass
@@ -494,10 +558,10 @@ Partial Class Form1
         Me.btnChangePass.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.btnChangePass.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Bold)
         Me.btnChangePass.ForeColor = System.Drawing.Color.White
-        Me.btnChangePass.Location = New System.Drawing.Point(16, 238)
+        Me.btnChangePass.Location = New System.Drawing.Point(16, 248)
         Me.btnChangePass.Name = "btnChangePass"
-        Me.btnChangePass.Size = New System.Drawing.Size(290, 32)
-        Me.btnChangePass.TabIndex = 11
+        Me.btnChangePass.Size = New System.Drawing.Size(290, 30)
+        Me.btnChangePass.TabIndex = 16
         Me.btnChangePass.Text = "Change password"
         Me.btnChangePass.UseVisualStyleBackColor = False
         '
@@ -505,16 +569,17 @@ Partial Class Form1
         '
         Me.lblAccTip.AutoSize = True
         Me.lblAccTip.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
-        Me.lblAccTip.Location = New System.Drawing.Point(320, 244)
+        Me.lblAccTip.Location = New System.Drawing.Point(320, 255)
         Me.lblAccTip.Name = "lblAccTip"
         Me.lblAccTip.Size = New System.Drawing.Size(290, 15)
-        Me.lblAccTip.TabIndex = 12
-        Me.lblAccTip.Text = "Tip: leave Username blank to auto-fill a demo account."
+        Me.lblAccTip.TabIndex = 17
+        Me.lblAccTip.Text = "Tip: leave Username blank for a demo account."
         '
         'tabAppInfo
         '
         Me.tabAppInfo.Controls.Add(Me.lblAppInfoNote)
         Me.tabAppInfo.Controls.Add(Me.btnAppInfo)
+        Me.tabAppInfo.Controls.Add(Me.btnUpdate)
         Me.tabAppInfo.Controls.Add(Me.lblAppInfo)
         Me.tabAppInfo.Location = New System.Drawing.Point(4, 26)
         Me.tabAppInfo.Name = "tabAppInfo"
@@ -532,7 +597,7 @@ Partial Class Form1
         Me.lblAppInfoNote.Name = "lblAppInfoNote"
         Me.lblAppInfoNote.Size = New System.Drawing.Size(470, 15)
         Me.lblAppInfoNote.TabIndex = 0
-        Me.lblAppInfoNote.Text = "Public branding + current version + download URL (used for OTA update checks)."
+        Me.lblAppInfoNote.Text = "Public branding + current version + download URL, and the update check your app runs at start."
         '
         'btnAppInfo
         '
@@ -547,6 +612,16 @@ Partial Class Form1
         Me.btnAppInfo.TabIndex = 1
         Me.btnAppInfo.Text = "Load app info"
         Me.btnAppInfo.UseVisualStyleBackColor = False
+        '
+        'btnUpdate
+        '
+        Me.btnUpdate.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Bold)
+        Me.btnUpdate.Location = New System.Drawing.Point(264, 38)
+        Me.btnUpdate.Name = "btnUpdate"
+        Me.btnUpdate.Size = New System.Drawing.Size(240, 32)
+        Me.btnUpdate.TabIndex = 3
+        Me.btnUpdate.Text = "Check for an update"
+        Me.btnUpdate.UseVisualStyleBackColor = True
         '
         'lblAppInfo
         '
@@ -658,9 +733,15 @@ Partial Class Form1
     Friend WithEvents txtNewPass As System.Windows.Forms.TextBox
     Friend WithEvents btnChangePass As System.Windows.Forms.Button
     Friend WithEvents lblAccTip As System.Windows.Forms.Label
+    Friend WithEvents lblAccKey As System.Windows.Forms.Label
+    Friend WithEvents txtAccKey As System.Windows.Forms.TextBox
+    Friend WithEvents btnRegisterKey As System.Windows.Forms.Button
+    Friend WithEvents btnRedeem As System.Windows.Forms.Button
+    Friend WithEvents lblRedeemNote As System.Windows.Forms.Label
     Friend WithEvents tabAppInfo As System.Windows.Forms.TabPage
     Friend WithEvents lblAppInfoNote As System.Windows.Forms.Label
     Friend WithEvents btnAppInfo As System.Windows.Forms.Button
+    Friend WithEvents btnUpdate As System.Windows.Forms.Button
     Friend WithEvents lblAppInfo As System.Windows.Forms.Label
     Friend WithEvents lblLog As System.Windows.Forms.Label
     Friend WithEvents txtLog As System.Windows.Forms.TextBox

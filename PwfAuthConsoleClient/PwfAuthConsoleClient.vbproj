@@ -1,9 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>PwfAuthConsoleClient</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The official PWF Auth client: https://www.nuget.org/packages/PWFAuth -->
+    <PackageReference Include="PWFAuth" Version="1.3.0" />
+  </ItemGroup>
 
 </Project>
