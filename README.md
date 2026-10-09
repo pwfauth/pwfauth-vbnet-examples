@@ -1,5 +1,7 @@
 # PWF Auth — VB.NET & C# example clients
 
+This revision requires the new signed-response SDK (PWFAuth 1.4.0 / Python pwfauth 1.2.0 as applicable). The included NuGet.Config restores the verified official SDK from vendor/; nuget.org publication is pending. It rejects unsigned or forged replies and fixes the production endpoint.
+
 <!-- CI badge hidden until the GitHub account's Actions billing is resolved. To restore, delete these comment markers:
 [![build](https://github.com/pwfauth/pwfauth-vbnet-examples/actions/workflows/build.yml/badge.svg)](https://github.com/pwfauth/pwfauth-vbnet-examples/actions/workflows/build.yml)
 -->
@@ -35,7 +37,7 @@ example is just the calls you would write in your own app.
 
 ```vb
 ' One client for the whole app: it holds the session and runs the heartbeat.
-Private ReadOnly _client As New PwfClient(Environment.GetEnvironmentVariable("PWF_APP_SECRET"))
+Private ReadOnly _client As New PwfClient("YOUR_APP_SECRET")
 
 Private Async Sub btnLogin_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
     Dim login = Await _client.LoginAsync(txtKey.Text)
@@ -70,15 +72,7 @@ update.
 
 ## Configure
 
-Set your app secret with an environment variable (recommended — never commit it):
-
-```powershell
-setx PWF_APP_SECRET "your_app_secret_here"
-```
-
-Optional: set `PWF_BASE_URL` to point at a different host, such as a staging
-server. In the WinForms app you can also type both values into the fields at the
-top of the window.
+Configure `DefaultAppSecret` in the selected example before distribution. Never commit the real secret. The server is fixed to `https://pwfauth.com`; the settings fields are read-only and environment overrides are ignored.
 
 ## Run
 
@@ -98,7 +92,7 @@ dotnet run --project PwfAuthCSharpClient -- PWF-XXXX-XXXX-XXXX [PWF-SPARE-KEY]
 
 An App Secret ships inside any client app and can be extracted from the binary,
 so treat client-side license checks as a **deterrent, not DRM**. Keep the secret
-out of source control: use the `PWF_APP_SECRET` environment variable above. The
+out of source control: configure the application during your private build process. The
 in-code default is intentionally blank.
 
 ## License

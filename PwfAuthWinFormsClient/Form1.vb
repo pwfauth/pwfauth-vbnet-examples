@@ -26,7 +26,7 @@ Partial Public Class Form1
 
     ' ── Configuration ──────────────────────────────────────────────────────
     ' Get your App Secret from the dashboard: Applications → your app → App Settings.
-    ' NEVER commit your real secret. Prefer the PWF_APP_SECRET environment variable.
+    ' NEVER commit your real secret. Configure DefaultAppSecret before distribution.
     Private Const DefaultAppSecret As String = ""
     ' NOTE: VB is case-insensitive — this must NOT be named "BaseUrl" or it would
     ' collide with a local "baseUrl" and self-assign to Nothing.
@@ -54,13 +54,13 @@ Partial Public Class Form1
         ActiveControl = txtKey         ' start in the License key box
     End Sub
 
-    ' Fill the settings fields from the environment (falling back to the consts),
+    ' Show the settings configured before distribution,
     ' show the device HWID, and greet the log.
     Private Sub InitRuntime()
-        Dim envSecret = Environment.GetEnvironmentVariable("PWF_APP_SECRET")
-        txtSecret.Text = If(String.IsNullOrWhiteSpace(envSecret), DefaultAppSecret, envSecret)
-        Dim envUrl = Environment.GetEnvironmentVariable("PWF_BASE_URL")
-        txtBaseUrl.Text = If(String.IsNullOrWhiteSpace(envUrl), DefaultBaseUrl, envUrl)
+        txtSecret.Text = DefaultAppSecret
+        txtSecret.ReadOnly = True
+        txtBaseUrl.Text = DefaultBaseUrl
+        txtBaseUrl.ReadOnly = True
         Dim hwid = HardwareId.Get()    ' the id PwfClient binds licenses to
         lblHwid.Text = "HWID  " & hwid
         LogLine("Ready. Device HWID = " & hwid)
@@ -340,10 +340,9 @@ Partial Public Class Form1
     ' The client for the current settings; rebuilt when the App Secret or Base URL
     ' changed. PwfClientOptions.Validate throws for an empty secret or a bad URL.
     Private Function GetClient() As PwfClient
-        Dim secret = txtSecret.Text.Trim()
+        Dim secret = DefaultAppSecret.Trim()
         If secret = "" Then secret = DefaultAppSecret
-        Dim url = txtBaseUrl.Text.Trim()
-        If url = "" Then url = DefaultBaseUrl
+        Dim url = DefaultBaseUrl
         If _client IsNot Nothing AndAlso secret = _clientSecret AndAlso url = _clientUrl Then Return _client
 
         If _client IsNot Nothing Then

@@ -32,7 +32,7 @@ Module Program
 
     ' ── Configuration ──────────────────────────────────────────────────────
     ' Get your App Secret from the dashboard: Applications → your app → App Settings.
-    ' NEVER commit your real secret. Prefer the PWF_APP_SECRET environment variable.
+    ' NEVER commit your real secret. Configure DefaultAppSecret before distribution.
     Private Const DefaultAppSecret As String = ""
     ' NOTE: VB is case-insensitive, so this const must NOT be named "BaseUrl" —
     ' it would collide with the local "baseUrl" below and self-assign to Nothing.
@@ -47,13 +47,11 @@ Module Program
         Console.WriteLine("PWF Auth — VB.NET client demo (PWFAuth package)   ·   https://pwfauth.com")
         Console.WriteLine()
 
-        Dim baseUrl = Environment.GetEnvironmentVariable("PWF_BASE_URL")
-        If String.IsNullOrWhiteSpace(baseUrl) Then baseUrl = DefaultBaseUrl
+        Dim baseUrl = DefaultBaseUrl
 
-        Dim appSecret = Environment.GetEnvironmentVariable("PWF_APP_SECRET")
-        If String.IsNullOrWhiteSpace(appSecret) Then appSecret = DefaultAppSecret
+        Dim appSecret = DefaultAppSecret
         If String.IsNullOrWhiteSpace(appSecret) OrElse appSecret = "YOUR_APP_SECRET" Then
-            Console.WriteLine("!  Set PWF_APP_SECRET (or DefaultAppSecret in Program.vb) first.")
+            Console.WriteLine("!  Set DefaultAppSecret in Program.vb first.")
             Return 1
         End If
 

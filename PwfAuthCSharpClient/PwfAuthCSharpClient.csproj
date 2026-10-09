@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <!-- The official PWF Auth client: https://www.nuget.org/packages/PWFAuth (netstandard2.0) -->
-    <PackageReference Include="PWFAuth" Version="1.3.0" />
+    <PackageReference Include="PWFAuth" Version="1.4.0" />
     <!-- Build-only: lets net481 build even without the local targeting pack. -->
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
   </ItemGroup>

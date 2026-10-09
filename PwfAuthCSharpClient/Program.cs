@@ -32,7 +32,7 @@ namespace PwfAuthCSharpClient
     internal static class Program
     {
         // Get your App Secret from the dashboard: Applications → your app → App Settings.
-        // NEVER commit your real secret. Prefer the PWF_APP_SECRET environment variable.
+        // NEVER commit your real secret. Configure DefaultAppSecret before distribution.
         private const string DefaultAppSecret = "";
         private const string DefaultBaseUrl = "https://pwfauth.com";
 
@@ -49,14 +49,12 @@ namespace PwfAuthCSharpClient
             Console.WriteLine("PWF Auth — C# / .NET Framework 4.8.1 client demo (PWFAuth package)   ·   https://pwfauth.com");
             Console.WriteLine();
 
-            string baseUrl = Environment.GetEnvironmentVariable("PWF_BASE_URL");
-            if (string.IsNullOrWhiteSpace(baseUrl)) baseUrl = DefaultBaseUrl;
+            string baseUrl = DefaultBaseUrl;
 
-            string appSecret = Environment.GetEnvironmentVariable("PWF_APP_SECRET");
-            if (string.IsNullOrWhiteSpace(appSecret)) appSecret = DefaultAppSecret;
+            string appSecret = DefaultAppSecret;
             if (string.IsNullOrWhiteSpace(appSecret))
             {
-                Console.WriteLine("!  Set PWF_APP_SECRET (or DefaultAppSecret in Program.cs) first.");
+                Console.WriteLine("!  Set DefaultAppSecret in Program.cs first.");
                 return 1;
             }
 
