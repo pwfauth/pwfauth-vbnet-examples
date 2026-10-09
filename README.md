@@ -1,6 +1,6 @@
 # PWF Auth — VB.NET & C# example clients
 
-This revision requires the new signed-response SDK (PWFAuth 1.4.0 / Python pwfauth 1.2.0 as applicable). The included NuGet.Config restores the verified official SDK from vendor/; nuget.org publication is pending. It rejects unsigned or forged replies and fixes the production endpoint.
+This revision requires the new signed-response SDK (PWFAuth 1.4.0 / Python pwfauth 1.2.0 as applicable). The included NuGet.Config restores the verified official SDK from vendor/; the same SDK version is also available on nuget.org. It rejects unsigned or forged replies and fixes the production endpoint.
 
 <!-- CI badge hidden until the GitHub account's Actions billing is resolved. To restore, delete these comment markers:
 [![build](https://github.com/pwfauth/pwfauth-vbnet-examples/actions/workflows/build.yml/badge.svg)](https://github.com/pwfauth/pwfauth-vbnet-examples/actions/workflows/build.yml)
