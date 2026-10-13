@@ -19,6 +19,7 @@ Imports PWFAuth
 '    • Trial/Reset: free trial, move a license to this PC (ResetHardwareIdAsync)
 '    • Accounts   : register (with or without a key), login, redeem a key, change password
 '    • App info   : name / version / download URL, update check
+'    • Variables  : save, read, delete and list user variables (Get/SetVariableAsync)
 '
 '  https://pwfauth.com   ·   API reference: https://pwfauth.com/api-reference
 ' ═══════════════════════════════════════════════════════════════════════════
@@ -331,6 +332,102 @@ Partial Public Class Form1
                     LogLine("[OK] update-check: v" & AppVersion & " is the latest version")
                 End If
             End Function)
+    End Sub
+
+    ' ═════════════════════════════════════════════════════════════════════════
+    '  User variables
+    ' ═════════════════════════════════════════════════════════════════════════
+
+    ' USER VARIABLES (PWFAuth 1.7.0) — small values kept on the server for the
+    ' signed-in key or account: settings, progress, flags. They follow the customer
+    ' to another PC, and you see and edit them in your panel (Licences or Users →
+    ' the side panel → Variables). A refusal (no session, a bad name, the limit of
+    ' 50 a customer, 4 KB a value) throws PwfRefusedException with the server's code.
+
+    Private Async Sub OnVarSetClick(sender As Object, e As EventArgs) Handles btnVarSet.Click
+        Dim name = txtVarName.Text.Trim()
+        If Not VarsReady(name) Then Return
+        Dim value = txtVarValue.Text
+        Await RunVarsAsync(sender, "set-variable",
+            Async Function()
+                Await _client.SetVariableAsync(name, value)
+                ShowVars("Saved  " & name & " = " & value, GreenC)
+                LogLine("[OK] set-variable: " & name)
+            End Function)
+    End Sub
+
+    Private Async Sub OnVarGetClick(sender As Object, e As EventArgs) Handles btnVarGet.Click
+        Dim name = txtVarName.Text.Trim()
+        If Not VarsReady(name) Then Return
+        Await RunVarsAsync(sender, "get-variable",
+            Async Function()
+                Dim value = Await _client.GetVariableAsync(name)    ' Nothing when never set
+                If value Is Nothing Then
+                    ShowVars(name & " is not set for this customer.", MutedC)
+                    LogLine("[OK] get-variable: " & name & " is not set")
+                Else
+                    txtVarValue.Text = value
+                    ShowVars(name & " = " & value, TextC)
+                    LogLine("[OK] get-variable: " & name & " = " & value)
+                End If
+            End Function)
+    End Sub
+
+    Private Async Sub OnVarDeleteClick(sender As Object, e As EventArgs) Handles btnVarDelete.Click
+        Dim name = txtVarName.Text.Trim()
+        If Not VarsReady(name) Then Return
+        Await RunVarsAsync(sender, "delete-variable",
+            Async Function()
+                Dim had = Await _client.DeleteVariableAsync(name)
+                ShowVars(If(had, "Deleted " & name & ".", name & " was not set."), If(had, GreenC, MutedC))
+                LogLine("[OK] delete-variable: " & name & If(had, " deleted", " was not set"))
+            End Function)
+    End Sub
+
+    Private Async Sub OnVarListClick(sender As Object, e As EventArgs) Handles btnVarList.Click
+        If Not VarsReady(Nothing) Then Return
+        Await RunVarsAsync(sender, "list-variables",
+            Async Function()
+                Dim all = Await _client.GetVariablesAsync()
+                Dim lines As New List(Of String)
+                For Each variable In all
+                    lines.Add(variable.Key & " = " & variable.Value)
+                Next
+                ShowVars(If(lines.Count = 0, "No variables yet for this customer.", String.Join(Environment.NewLine, lines)), TextC)
+                LogLine("[OK] list-variables: " & all.Count & If(all.Count = 1, " variable", " variables"))
+            End Function)
+    End Sub
+
+    ' A session is needed, and a name for everything but "List all".
+    Private Function VarsReady(name As String) As Boolean
+        If _client Is Nothing OrElse Not _client.IsSignedIn Then
+            ShowVars("Login first: variables belong to the signed-in key or account.", RedC)
+            LogLine("!  Login first — no active session.")
+            Return False
+        End If
+        If name IsNot Nothing AndAlso name = "" Then
+            ShowVars("Enter a name: letters, digits, _ . or - (up to 64).", RedC)
+            Return False
+        End If
+        Return True
+    End Function
+
+    ' RunAsync, plus the server's refusal shown on the tab.
+    Private Async Function RunVarsAsync(sender As Object, name As String, work As Func(Of Task)) As Task
+        Await RunAsync(sender, name,
+            Async Function()
+                Try
+                    Await work()
+                Catch ex As PwfRefusedException
+                    ShowVars("Refused: " & ex.Message & "  (" & ex.ErrorCode & ")", RedC)
+                    LogLine("[--] " & name & ": " & ex.Message & "  (" & ex.ErrorCode & ")")
+                End Try
+            End Function)
+    End Function
+
+    Private Sub ShowVars(text As String, color As Color)
+        lblVars.ForeColor = color
+        lblVars.Text = text
     End Sub
 
     ' ═════════════════════════════════════════════════════════════════════════

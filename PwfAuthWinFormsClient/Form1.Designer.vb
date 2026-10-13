@@ -72,6 +72,17 @@ Partial Class Form1
         Me.btnAppInfo = New System.Windows.Forms.Button()
         Me.btnUpdate = New System.Windows.Forms.Button()
         Me.lblAppInfo = New System.Windows.Forms.Label()
+        Me.tabVars = New System.Windows.Forms.TabPage()
+        Me.lblVarsNote = New System.Windows.Forms.Label()
+        Me.lblVarName = New System.Windows.Forms.Label()
+        Me.txtVarName = New System.Windows.Forms.TextBox()
+        Me.lblVarValue = New System.Windows.Forms.Label()
+        Me.txtVarValue = New System.Windows.Forms.TextBox()
+        Me.btnVarSet = New System.Windows.Forms.Button()
+        Me.btnVarGet = New System.Windows.Forms.Button()
+        Me.btnVarDelete = New System.Windows.Forms.Button()
+        Me.btnVarList = New System.Windows.Forms.Button()
+        Me.lblVars = New System.Windows.Forms.Label()
         Me.lblLog = New System.Windows.Forms.Label()
         Me.txtLog = New System.Windows.Forms.TextBox()
         Me.tabs.SuspendLayout()
@@ -79,6 +90,7 @@ Partial Class Form1
         Me.tabTrial.SuspendLayout()
         Me.tabAccounts.SuspendLayout()
         Me.tabAppInfo.SuspendLayout()
+        Me.tabVars.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblTitle
@@ -153,6 +165,7 @@ Partial Class Form1
         Me.tabs.Controls.Add(Me.tabTrial)
         Me.tabs.Controls.Add(Me.tabAccounts)
         Me.tabs.Controls.Add(Me.tabAppInfo)
+        Me.tabs.Controls.Add(Me.tabVars)
         Me.tabs.Font = New System.Drawing.Font("Segoe UI", 9.5!)
         Me.tabs.Location = New System.Drawing.Point(18, 180)
         Me.tabs.Name = "tabs"
@@ -633,6 +646,128 @@ Partial Class Form1
         Me.lblAppInfo.TabIndex = 2
         Me.lblAppInfo.Text = "Click ""Load app info"" to fetch the app's public metadata."
         '
+        'tabVars
+        '
+        Me.tabVars.Controls.Add(Me.lblVarsNote)
+        Me.tabVars.Controls.Add(Me.lblVarName)
+        Me.tabVars.Controls.Add(Me.txtVarName)
+        Me.tabVars.Controls.Add(Me.lblVarValue)
+        Me.tabVars.Controls.Add(Me.txtVarValue)
+        Me.tabVars.Controls.Add(Me.btnVarSet)
+        Me.tabVars.Controls.Add(Me.btnVarGet)
+        Me.tabVars.Controls.Add(Me.btnVarDelete)
+        Me.tabVars.Controls.Add(Me.btnVarList)
+        Me.tabVars.Controls.Add(Me.lblVars)
+        Me.tabVars.Location = New System.Drawing.Point(4, 26)
+        Me.tabVars.Name = "tabVars"
+        Me.tabVars.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabVars.Size = New System.Drawing.Size(636, 310)
+        Me.tabVars.TabIndex = 4
+        Me.tabVars.Text = "Variables"
+        Me.tabVars.UseVisualStyleBackColor = True
+        '
+        'lblVarsNote
+        '
+        Me.lblVarsNote.AutoSize = True
+        Me.lblVarsNote.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
+        Me.lblVarsNote.Location = New System.Drawing.Point(16, 14)
+        Me.lblVarsNote.Name = "lblVarsNote"
+        Me.lblVarsNote.Size = New System.Drawing.Size(600, 15)
+        Me.lblVarsNote.TabIndex = 0
+        Me.lblVarsNote.Text = "Values kept on the server for the signed-in key or account. Login first; you see them in your panel too."
+        '
+        'lblVarName
+        '
+        Me.lblVarName.AutoSize = True
+        Me.lblVarName.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
+        Me.lblVarName.Location = New System.Drawing.Point(16, 46)
+        Me.lblVarName.Name = "lblVarName"
+        Me.lblVarName.Size = New System.Drawing.Size(120, 15)
+        Me.lblVarName.TabIndex = 1
+        Me.lblVarName.Text = "Name"
+        '
+        'txtVarName
+        '
+        Me.txtVarName.Font = New System.Drawing.Font("Consolas", 10.0!)
+        Me.txtVarName.Location = New System.Drawing.Point(16, 64)
+        Me.txtVarName.Name = "txtVarName"
+        Me.txtVarName.PlaceholderText = "theme"
+        Me.txtVarName.Size = New System.Drawing.Size(220, 23)
+        Me.txtVarName.TabIndex = 2
+        '
+        'lblVarValue
+        '
+        Me.lblVarValue.AutoSize = True
+        Me.lblVarValue.ForeColor = System.Drawing.Color.FromArgb(CType(CType(108, Byte), Integer), CType(CType(117, Byte), Integer), CType(CType(125, Byte), Integer))
+        Me.lblVarValue.Location = New System.Drawing.Point(250, 46)
+        Me.lblVarValue.Name = "lblVarValue"
+        Me.lblVarValue.Size = New System.Drawing.Size(120, 15)
+        Me.lblVarValue.TabIndex = 3
+        Me.lblVarValue.Text = "Value"
+        '
+        'txtVarValue
+        '
+        Me.txtVarValue.Font = New System.Drawing.Font("Segoe UI", 9.5!)
+        Me.txtVarValue.Location = New System.Drawing.Point(250, 64)
+        Me.txtVarValue.Name = "txtVarValue"
+        Me.txtVarValue.PlaceholderText = "dark"
+        Me.txtVarValue.Size = New System.Drawing.Size(366, 23)
+        Me.txtVarValue.TabIndex = 4
+        '
+        'btnVarSet
+        '
+        Me.btnVarSet.BackColor = System.Drawing.Color.FromArgb(CType(CType(13, Byte), Integer), CType(CType(110, Byte), Integer), CType(CType(253, Byte), Integer))
+        Me.btnVarSet.FlatAppearance.BorderSize = 0
+        Me.btnVarSet.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnVarSet.ForeColor = System.Drawing.Color.White
+        Me.btnVarSet.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Bold)
+        Me.btnVarSet.Location = New System.Drawing.Point(16, 104)
+        Me.btnVarSet.Name = "btnVarSet"
+        Me.btnVarSet.Size = New System.Drawing.Size(146, 32)
+        Me.btnVarSet.TabIndex = 5
+        Me.btnVarSet.Text = "Save"
+        Me.btnVarSet.UseVisualStyleBackColor = False
+        '
+        'btnVarGet
+        '
+        Me.btnVarGet.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Bold)
+        Me.btnVarGet.Location = New System.Drawing.Point(170, 104)
+        Me.btnVarGet.Name = "btnVarGet"
+        Me.btnVarGet.Size = New System.Drawing.Size(146, 32)
+        Me.btnVarGet.TabIndex = 6
+        Me.btnVarGet.Text = "Read"
+        Me.btnVarGet.UseVisualStyleBackColor = True
+        '
+        'btnVarDelete
+        '
+        Me.btnVarDelete.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Bold)
+        Me.btnVarDelete.Location = New System.Drawing.Point(324, 104)
+        Me.btnVarDelete.Name = "btnVarDelete"
+        Me.btnVarDelete.Size = New System.Drawing.Size(140, 32)
+        Me.btnVarDelete.TabIndex = 7
+        Me.btnVarDelete.Text = "Delete"
+        Me.btnVarDelete.UseVisualStyleBackColor = True
+        '
+        'btnVarList
+        '
+        Me.btnVarList.Font = New System.Drawing.Font("Segoe UI", 9.5!, System.Drawing.FontStyle.Bold)
+        Me.btnVarList.Location = New System.Drawing.Point(472, 104)
+        Me.btnVarList.Name = "btnVarList"
+        Me.btnVarList.Size = New System.Drawing.Size(144, 32)
+        Me.btnVarList.TabIndex = 8
+        Me.btnVarList.Text = "List all"
+        Me.btnVarList.UseVisualStyleBackColor = True
+        '
+        'lblVars
+        '
+        Me.lblVars.Font = New System.Drawing.Font("Segoe UI", 10.0!)
+        Me.lblVars.ForeColor = System.Drawing.Color.FromArgb(CType(CType(33, Byte), Integer), CType(CType(37, Byte), Integer), CType(CType(41, Byte), Integer))
+        Me.lblVars.Location = New System.Drawing.Point(16, 150)
+        Me.lblVars.Name = "lblVars"
+        Me.lblVars.Size = New System.Drawing.Size(600, 150)
+        Me.lblVars.TabIndex = 9
+        Me.lblVars.Text = "Login on the Activation tab, then save or read a variable."
+        '
         'lblLog
         '
         Me.lblLog.AutoSize = True
@@ -688,6 +823,8 @@ Partial Class Form1
         Me.tabAccounts.PerformLayout()
         Me.tabAppInfo.ResumeLayout(False)
         Me.tabAppInfo.PerformLayout()
+        Me.tabVars.ResumeLayout(False)
+        Me.tabVars.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -743,6 +880,17 @@ Partial Class Form1
     Friend WithEvents btnAppInfo As System.Windows.Forms.Button
     Friend WithEvents btnUpdate As System.Windows.Forms.Button
     Friend WithEvents lblAppInfo As System.Windows.Forms.Label
+    Friend WithEvents tabVars As System.Windows.Forms.TabPage
+    Friend WithEvents lblVarsNote As System.Windows.Forms.Label
+    Friend WithEvents lblVarName As System.Windows.Forms.Label
+    Friend WithEvents txtVarName As System.Windows.Forms.TextBox
+    Friend WithEvents lblVarValue As System.Windows.Forms.Label
+    Friend WithEvents txtVarValue As System.Windows.Forms.TextBox
+    Friend WithEvents btnVarSet As System.Windows.Forms.Button
+    Friend WithEvents btnVarGet As System.Windows.Forms.Button
+    Friend WithEvents btnVarDelete As System.Windows.Forms.Button
+    Friend WithEvents btnVarList As System.Windows.Forms.Button
+    Friend WithEvents lblVars As System.Windows.Forms.Label
     Friend WithEvents lblLog As System.Windows.Forms.Label
     Friend WithEvents txtLog As System.Windows.Forms.TextBox
 End Class

@@ -15,12 +15,13 @@ Imports PWFAuth
 '    2) Login           LoginAsync               POST /api/auth/login.php
 '                       (key bound to another PC? ResetHardwareIdAsync moves it here)
 '    3) Heartbeat       HeartbeatAsync           POST /api/auth/heartbeat.php
-'    4) Logout          LogoutAsync              POST /api/auth/logout.php
-'    5) Free trial      CreateTrialAsync         POST /api/auth/trial.php
-'    6) Accounts        RegisterAccountAsync, AccountLoginAsync
+'    4) Variables       Get/Set/GetVariablesAsync POST /api/auth/var.php
+'    5) Logout          LogoutAsync              POST /api/auth/logout.php
+'    6) Free trial      CreateTrialAsync         POST /api/auth/trial.php
+'    7) Accounts        RegisterAccountAsync, AccountLoginAsync
 '                       (or RegisterAccountWithKeyAsync when the app wants a key at sign-up)
-'    7) Redeem a key    RedeemKeyAsync            (needs a spare, unused key)
-'    8) New password    ChangeAccountPasswordAsync
+'    8) Redeem a key    RedeemKeyAsync            (needs a spare, unused key)
+'    9) New password    ChangeAccountPasswordAsync
 '
 '  The package encrypts the requests that must be encrypted, repairs a wrong PC
 '  clock by itself and binds licenses to this machine's hardware id.
@@ -66,7 +67,7 @@ Module Program
         End If
         licenseKey = licenseKey.Trim()
 
-        ' Optional: an UNUSED key for section 7. It is used up there (its time moves
+        ' Optional: an UNUSED key for section 8. It is used up there (its time moves
         ' onto the demo account), so never pass the key you use every day.
         Dim spareKey = If(args.Length > 1, args(1), Environment.GetEnvironmentVariable("PWF_SPARE_KEY"))
         spareKey = If(spareKey, "").Trim()
@@ -135,14 +136,33 @@ Module Program
                     Dim hb = Await client.HeartbeatAsync()
                     If hb.Success Then Ok("Session alive") Else Fail("Session ended", hb)
 
-                    ' 4) LOGOUT — ends the session. The key stays bound to this PC.
-                    Section("4) Logout")
+                    ' 4) USER VARIABLES — small values kept on the server for this key
+                    '    (settings, progress, flags). They follow the key to another PC, and
+                    '    you see and edit them in your panel: Licences → the key → Variables.
+                    '    The demo counts its own runs in "demo_runs". A refusal (no session,
+                    '    a bad name, the limit of 50) throws PwfRefusedException.
+                    Section("4) User variables")
+                    Try
+                        Dim runs As Integer
+                        If Not Integer.TryParse(Await client.GetVariableAsync("demo_runs"), runs) Then runs = 0
+                        runs += 1
+                        Await client.SetVariableAsync("demo_runs", runs.ToString())
+                        Ok("This key has run the demo " & runs & If(runs = 1, " time", " times") & " (kept on the server as demo_runs)")
+                        For Each variable In Await client.GetVariablesAsync()
+                            Detail(variable.Key, variable.Value)
+                        Next
+                    Catch ex As PwfRefusedException
+                        Fail("User variables", ex.Message & "  (" & ex.ErrorCode & ")")
+                    End Try
+
+                    ' 5) LOGOUT — ends the session. The key stays bound to this PC.
+                    Section("5) Logout")
                     Dim lo = Await client.LogoutAsync()
                     If lo IsNot Nothing AndAlso lo.Success Then Ok("Logged out") Else Fail("Logout", lo)
                 End If
 
-                ' 5) FREE TRIAL — a trial key bound to this PC (if the app allows trials).
-                Section("5) Free trial")
+                ' 6) FREE TRIAL — a trial key bound to this PC (if the app allows trials).
+                Section("6) Free trial")
                 Dim trial = Await client.CreateTrialAsync()
                 If trial.Success Then
                     Ok("Trial key " & Str(trial, "trial_key") & "  (expires " & Str(trial, "expires_at") & ")")
@@ -150,9 +170,9 @@ Module Program
                     Fail("Trial", trial)
                 End If
 
-                ' 6) END-USER ACCOUNTS — username/password sign-in, next to license keys.
+                ' 7) END-USER ACCOUNTS — username/password sign-in, next to license keys.
                 '    Registers a throwaway account, signs in, then changes its password.
-                Section("6) Accounts")
+                Section("7) Accounts")
                 Dim demoUser = "demo_" & DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()
                 Const pass1 = "DemoPass!123456"
                 Const pass2 = "DemoPass!654321"
@@ -182,9 +202,9 @@ Module Program
                     Dim acc = Await client.AccountLoginAsync(demoUser, pass1)
                     If acc.Success Then Ok("Account login — session " & client.SessionId) Else Fail("Account login", acc)
 
-                    ' 7) KEYS ON ACCOUNTS — a customer buys a key and adds its time to
+                    ' 8) KEYS ON ACCOUNTS — a customer buys a key and adds its time to
                     '    their account. Through the signed-in session: no password needed.
-                    Section("7) Redeem a key onto the account")
+                    Section("8) Redeem a key onto the account")
                     If spareKey = "" Then
                         Console.WriteLine("     Skipped — pass an unused key as the 2nd argument (or PWF_SPARE_KEY).")
                         Console.WriteLine("     That key is used up: its time moves onto the demo account.")
@@ -200,9 +220,9 @@ Module Program
                         End If
                     End If
 
-                    ' 8) CHANGE PASSWORD — also signs the account out on every device,
+                    ' 9) CHANGE PASSWORD — also signs the account out on every device,
                     '    this one included, so it comes last.
-                    Section("8) Change the account password")
+                    Section("9) Change the account password")
                     Dim cp = Await client.ChangeAccountPasswordAsync(demoUser, pass1, pass2)
                     If cp.Success Then Ok("Password changed — every session of the account was signed out") Else Fail("Change password", cp)
                     If client.IsSignedIn Then Await client.LogoutAsync()   ' clears the local session too

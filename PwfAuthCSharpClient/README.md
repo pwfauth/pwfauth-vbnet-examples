@@ -25,16 +25,17 @@ because older .NET Framework defaults are rejected by the server's edge.
 | 1 | Check a license key | `CheckKeyAsync` |
 | 2 | Login · move a license to this PC when it is bound elsewhere | `LoginAsync` · `ResetHardwareIdAsync` |
 | 3 | Heartbeat | `HeartbeatAsync` (a real app: `StartHeartbeat` + `SessionEnded`) |
-| 4 | Logout | `LogoutAsync` |
-| 5 | Free trial | `CreateTrialAsync` |
-| 6 | Register · account login | `RegisterAccountAsync` (or `RegisterAccountWithKeyAsync`) · `AccountLoginAsync` |
-| 7 | Redeem a key onto the account | `RedeemKeyAsync` |
-| 8 | Change the account password | `ChangeAccountPasswordAsync` |
+| 4 | User variables: values kept on the server for this key | `GetVariableAsync` / `SetVariableAsync` / `GetVariablesAsync` |
+| 5 | Logout | `LogoutAsync` |
+| 6 | Free trial | `CreateTrialAsync` |
+| 7 | Register · account login | `RegisterAccountAsync` (or `RegisterAccountWithKeyAsync`) · `AccountLoginAsync` |
+| 8 | Redeem a key onto the account | `RedeemKeyAsync` |
+| 9 | Change the account password | `ChangeAccountPasswordAsync` |
 
 ## Run
 
 ```powershell
-setx PWF_APP_SECRET "your_app_secret"            # run once (get it from the dashboard)
+# first set DefaultAppSecret in Program.cs (from the dashboard)
 dotnet run -- PWF-XXXX-XXXX-XXXX                  # or run with no argument to be prompted
 dotnet run -- PWF-XXXX-XXXX-XXXX PWF-SPARE-KEY    # also redeem an UNUSED key onto the demo account
 ```
@@ -57,9 +58,10 @@ developer/targeting pack. It is bundled with Visual Studio; otherwise
 ## Notes
 
 - An app secret shipped in a client binary can be extracted. Treat license
-  checks as a deterrent, not DRM. Keep the secret out of source control: use the
-  `PWF_APP_SECRET` environment variable. The in-code default is blank.
+  checks as a deterrent, not DRM. Keep the secret out of source control: set
+  `DefaultAppSecret` in your private build only. The in-code default is blank.
 - This demo calls the real API, so it leaves test data on the server:
   - The account section creates a throwaway `demo_<timestamp>` account.
-  - Section 5 issues a trial, once per app and device.
-  - Section 7 uses up the spare key.
+  - Section 4 keeps a `demo_runs` user variable on the key.
+  - Section 6 issues a trial, once per app and device.
+  - Section 8 uses up the spare key.

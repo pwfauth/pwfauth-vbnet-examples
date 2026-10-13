@@ -26,17 +26,18 @@ live **Activity log**.
 | Accounts | Change password (signs the account out on every device) | `ChangeAccountPasswordAsync` |
 | App info | Name, version, download URL, login message, maintenance | `GetAppInfoAsync` |
 | App info | Update check | `CheckUpdateAsync` |
+| Variables | Save, read, delete and list user variables of the signed-in key or account | `SetVariableAsync` · `GetVariableAsync` · `DeleteVariableAsync` · `GetVariablesAsync` |
 
 ## Run
 
 ```powershell
-setx PWF_APP_SECRET "your_app_secret"   # run once (get it from the dashboard)
+# first set DefaultAppSecret in Form1.vb (from the dashboard)
 dotnet run
 ```
 
 Requires Windows (targets `net8.0-windows`). The **App Secret** and **Base URL**
-fields at the top of the window are pre-filled from `PWF_APP_SECRET` and
-`PWF_BASE_URL`, or from the fallbacks in `Form1.vb`.
+fields at the top of the window show `DefaultAppSecret` from `Form1.vb` and the
+fixed `https://pwfauth.com`; they are read-only, and environment variables are ignored.
 
 ## How it works
 
@@ -62,10 +63,10 @@ fields at the top of the window are pre-filled from `PWF_APP_SECRET` and
 
 ## Configuration
 
-| Variable | Purpose | Default |
+| Where | Purpose | Default |
 | --- | --- | --- |
-| `PWF_APP_SECRET` | Your app secret (Applications → your app → App Settings) | — |
-| `PWF_BASE_URL` | API base URL | `https://pwfauth.com` |
+| `DefaultAppSecret` in `Form1.vb` | Your app secret (Applications → your app → App Settings) | blank |
+| — | The server: fixed, environment variables are ignored | `https://pwfauth.com` |
 
 ## Notes
 
@@ -74,7 +75,10 @@ fields at the top of the window are pre-filled from `PWF_APP_SECRET` and
   control.
 - **Test data.** This demo calls the real API, so it leaves test data on the
   server:
-  - When you leave the fields blank, the **Accounts** tab fills in a throwaway
+  - The **Variables** tab needs a session: login on **Activation** (or **Accounts**)
+  first. What you save there shows in your panel, under the key or account →
+  **Variables**, and follows the customer to a new PC.
+- When you leave the fields blank, the **Accounts** tab fills in a throwaway
     `demo_<timestamp>` account.
   - **Start free trial** issues a trial, once per app and device.
   - **Register with the key** and **Redeem the key** use the key up.
