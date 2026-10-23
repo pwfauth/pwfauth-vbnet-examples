@@ -1,6 +1,9 @@
-# PWF Auth — VB.NET & C# example clients
+<p align="center"><b>English</b> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.ar.md">العربية</a></p>
+<p align="center">Video tutorials: <a href="https://www.youtube.com/@pwfauth">youtube.com/@pwfauth</a></p>
 
-This revision uses **PWFAuth 1.7.0**. The included NuGet.Config restores the verified official SDK from vendor/; the same package is on nuget.org. PWFAuth 1.4.0 and older cannot talk to the current server (it signs its replies with a new key), so update older copies.
+# PWF Auth: VB.NET & C# example clients
+
+This revision uses **PWFAuth 1.7.0**. The included NuGet.Config restores the verified official SDK from vendor/; the same package is on nuget.org. PWFAuth 1.4.0 and older cannot talk to the current server (it signs its replies with a new key), so update older copies
 
 <!-- CI badge hidden until the GitHub account's Actions billing is resolved. To restore, delete these comment markers:
 [![build](https://github.com/pwfauth/pwfauth-vbnet-examples/actions/workflows/build.yml/badge.svg)](https://github.com/pwfauth/pwfauth-vbnet-examples/actions/workflows/build.yml)
@@ -10,22 +13,22 @@ This revision uses **PWFAuth 1.7.0**. The included NuGet.Config restores the ver
 free backend for license keys, end-user accounts and update checks behind one REST
 API. All three are built on the official
 **[PWFAuth NuGet package](https://www.nuget.org/packages/PWFAuth)**, so each
-example is just the calls you would write in your own app.
+example is just the calls you would write in your own app
 
 ![The PwfAuthWinFormsClient "API Explorer": signed in, heartbeat running](docs/api-explorer.png)
 
 > `PwfAuthWinFormsClient` is the tabbed **API Explorer**. Every feature is one
 > click, the background heartbeat runs after login, and every reply goes to the
-> activity log.
+> activity log
 
-![PwfAuthConsoleClient — one run through every feature](docs/console-client.png)
+![PwfAuthConsoleClient: one run through every feature](docs/console-client.png)
 
-> `PwfAuthConsoleClient` is a single guided run through every feature.
+> `PwfAuthConsoleClient` is a single guided run through every feature
 
-![PwfAuthCSharpClient — the same run on .NET Framework 4.8.1](docs/csharp-client.png)
+![PwfAuthCSharpClient: the same run on .NET Framework 4.8.1](docs/csharp-client.png)
 
 > `PwfAuthCSharpClient` is the same run in **C# on .NET Framework 4.8.1**. The
-> package targets netstandard2.0, so it works in older apps too.
+> package targets netstandard2.0, so it works in older apps too
 
 | Project | What it shows |
 | --- | --- |
@@ -51,36 +54,36 @@ End Sub
 
 - **Encryption.** It encrypts the requests that must be encrypted (login,
   heartbeat, logout, check key, app content) and refuses a reply that claims
-  success without encryption.
-- **Hardware id.** It binds licenses to this computer.
-- **Wrong clocks.** It repairs a wrong PC clock by itself.
-- **Kill switch.** It runs the heartbeat that obeys your kill switch.
+  success without encryption
+- **Hardware id.** It binds licenses to this computer
+- **Wrong clocks.** It repairs a wrong PC clock by itself
+- **Kill switch.** It runs the heartbeat that obeys your kill switch
 - **Moving a license.** `ResetHardwareIdAsync` moves a license to a new PC, with
-  your app's cooldown.
+  your app's cooldown
 - **Accounts on keys.** `RegisterAccountWithKeyAsync` and `RedeemKeyAsync` cover
-  accounts that run on license keys.
+  accounts that run on license keys
 - **User variables.** `SetVariableAsync`, `GetVariableAsync`, `GetVariablesAsync`
   and `DeleteVariableAsync` keep small values on the server for the signed-in
   customer: settings, progress, flags. They follow the customer to a new PC, and
   you see and edit them in your panel (**Licences** or **Users** → the side panel
-  → **Variables**).
+  → **Variables**)
 
 Earlier versions of these examples carried their own hand-written client. They
 now use the package, so they get every server change and fix with a package
-update.
+update
 
 ## Requirements
 
 - .NET SDK 8.0 or newer (`dotnet --version`)
 - For `PwfAuthCSharpClient`: the **.NET Framework 4.8.1** targeting pack. It ships
-  with Visual Studio, and the build also restores it through NuGet.
-- A free PWF Auth account and an app. Create one at <https://pwfauth.com>.
+  with Visual Studio, and the build also restores it through NuGet
+- A free PWF Auth account and an app. Create one at <https://pwfauth.com>
 
-`dotnet build` restores the `PWFAuth` package from nuget.org automatically.
+`dotnet build` restores the `PWFAuth` package from nuget.org automatically
 
 ## Configure
 
-Configure `DefaultAppSecret` in the selected example before distribution. Never commit the real secret. The server is fixed to `https://pwfauth.com`; the settings fields are read-only and environment overrides are ignored.
+Configure `DefaultAppSecret` in the selected example before distribution. Never commit the real secret. The server is fixed to `https://pwfauth.com`; the settings fields are read-only and environment overrides are ignored
 
 ## Run
 
@@ -101,8 +104,8 @@ dotnet run --project PwfAuthCSharpClient -- PWF-XXXX-XXXX-XXXX [PWF-SPARE-KEY]
 An App Secret ships inside any client app and can be extracted from the binary,
 so treat client-side license checks as a **deterrent, not DRM**. Keep the secret
 out of source control: configure the application during your private build process. The
-in-code default is intentionally blank.
+in-code default is intentionally blank
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE)
